@@ -13,7 +13,7 @@
 # limitations under the License.
 
 FROM debian:bookworm
-MAINTAINER Stefan Schimanski <sttts@redhat.com>
+MAINTAINER Dr. Stefan Schimanski <sttts@redhat.com>
 RUN apt-get update \
  && apt-get install -y -qq git=1:2.39.5-0+deb12u2 \
  && apt-get install -y -qq mercurial \

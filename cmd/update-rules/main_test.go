@@ -24,7 +24,7 @@ import (
 var (
 	testdataRules        = "testdata/rules.yaml"
 	testdataInvalidRules = "testdata/invalid_rules.yaml"
-	remoteRules          = "https://raw.githubusercontent.com/kubernetes/kubernetes/master/staging/publishing/rules.yaml"
+	remoteRules          = "https://raw.githubusercontent.com/kcp-dev/kcp/main/staging/publishing/rules.yaml"
 )
 
 func TestLoad(t *testing.T) {
@@ -100,8 +100,8 @@ func TestUpdateRules(t *testing.T) {
 			"1.16.1",
 		},
 		{
-			"master branch rule update for go version",
-			"master",
+			"main branch rule update for go version",
+			"main",
 			"1.16.4",
 		},
 	}
@@ -115,27 +115,27 @@ func TestUpdateRules(t *testing.T) {
 			UpdateRules(rules, tt.branch, tt.goVersion, false)
 
 			for _, repoRule := range rules.Rules {
-				var masterRulePresent, branchRulePresent bool
-				var masterRuleIndex, branchRuleIndex int
+				var mainRulePresent, branchRulePresent bool
+				var mainRuleIndex, branchRuleIndex int
 
 				for i, branchRule := range repoRule.Branches {
 					switch branchRule.Name {
-					case "master":
-						masterRulePresent = true
-						masterRuleIndex = i
+					case "main":
+						mainRulePresent = true
+						mainRuleIndex = i
 					case tt.branch:
 						branchRulePresent = true
 						branchRuleIndex = i
 					}
 				}
-				switch masterRulePresent {
+				switch mainRulePresent {
 				case true:
-					if !branchRulePresent && tt.branch != "master" {
+					if !branchRulePresent && tt.branch != "main" {
 						t.Errorf("error updating branch %s rule for repo %s", tt.branch, repoRule.DestinationRepository)
 					}
 				case false:
 					if branchRulePresent {
-						t.Errorf("incorrectly added branch %s rule for repo %s whose master branch rule does not exists", tt.branch, repoRule.DestinationRepository)
+						t.Errorf("incorrectly added branch %s rule for repo %s whose main branch rule does not exists", tt.branch, repoRule.DestinationRepository)
 					}
 				}
 
@@ -143,7 +143,7 @@ func TestUpdateRules(t *testing.T) {
 					t.Errorf("incorrect update to branch %s rule for source branch field for repo %s", tt.branch, repoRule.DestinationRepository)
 				}
 
-				if repoRule.Branches[masterRuleIndex].Source.Dir != repoRule.Branches[branchRuleIndex].Source.Dir {
+				if repoRule.Branches[mainRuleIndex].Source.Dir != repoRule.Branches[branchRuleIndex].Source.Dir {
 					t.Errorf("incorrect update to branch %s rule for source dir field for repo %s", tt.branch, repoRule.DestinationRepository)
 				}
 
@@ -151,15 +151,15 @@ func TestUpdateRules(t *testing.T) {
 					t.Errorf("incorrect go version set for branch %s rule for repo %s", tt.branch, repoRule.DestinationRepository)
 				}
 
-				if len(repoRule.Branches[masterRuleIndex].Dependencies) != len(repoRule.Branches[branchRuleIndex].Dependencies) {
+				if len(repoRule.Branches[mainRuleIndex].Dependencies) != len(repoRule.Branches[branchRuleIndex].Dependencies) {
 					t.Errorf("incorrect update to branch %s rule dependencies for repo %s", tt.branch, repoRule.DestinationRepository)
 				}
 
-				if len(repoRule.Branches[masterRuleIndex].RequiredPackages) != len(repoRule.Branches[branchRuleIndex].RequiredPackages) {
+				if len(repoRule.Branches[mainRuleIndex].RequiredPackages) != len(repoRule.Branches[branchRuleIndex].RequiredPackages) {
 					t.Errorf("incorrect update to branch %s rule required packages for repo %s", tt.branch, repoRule.DestinationRepository)
 				}
 
-				if repoRule.Branches[masterRuleIndex].SmokeTest != repoRule.Branches[branchRuleIndex].SmokeTest {
+				if repoRule.Branches[mainRuleIndex].SmokeTest != repoRule.Branches[branchRuleIndex].SmokeTest {
 					t.Errorf("incorrect update to branch %s rule smoke-test for repo %s", tt.branch, repoRule.DestinationRepository)
 				}
 			}

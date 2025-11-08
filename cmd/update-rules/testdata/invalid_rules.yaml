@@ -2,9 +2,9 @@ rules:
 - destination: code-generator
   branches:
   - source:
-      branch: master
+      branch: main
       dir: staging/src/k8s.io/code-generator
-    name: master
+    name: main
   - source:
       branch: release-1.19
       dir: staging/src/k8s.io/code-generator

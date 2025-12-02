@@ -17,13 +17,14 @@ limitations under the License.
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
 
 	"github.com/golang/glog"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 	"k8s.io/publishing-bot/cmd/publishing-bot/config"
 )
 
@@ -96,10 +97,14 @@ func main() {
 		glog.Fatalf("update failed, found invalid rules after update: %v", err)
 	}
 
-	data, err := yaml.Marshal(rules)
-	if err != nil {
+	var buf bytes.Buffer
+	enc := yaml.NewEncoder(&buf)
+	enc.SetIndent(2)
+	if err := enc.Encode(rules); err != nil {
 		glog.Fatalf("error marshaling rules %v", err)
 	}
+	_ = enc.Close()
+	data := buf.Bytes()
 
 	if o.out != "" {
 		err = exportRules(o.out, data)

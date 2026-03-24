@@ -364,6 +364,7 @@ func main() {
 				if publishSemverTag {
 					bh = createCommitToFixDeps(wt, semverTag)
 				} else {
+					fmt.Printf("DEBUG: Creating commit to fix dependencies for %q.\n", bName)
 					bh = createCommitToFixDeps(wt, bName)
 				}
 			}

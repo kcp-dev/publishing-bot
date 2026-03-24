@@ -193,12 +193,6 @@ func main() {
 
 	mappingFilesWritten := map[string]bool{}
 
-	// DEBUG: remove this after debugging
-	fmt.Printf("Tags at %s remote:\n", *sourceRemote)
-	for name, kh := range srcTagCommits {
-		fmt.Printf("%s: %s\n", name, kh.String())
-	}
-
 	// create or update tags from srcTagCommits as local tags with the given prefix
 	createdTags := []string{}
 	for name, kh := range srcTagCommits {
@@ -364,7 +358,6 @@ func main() {
 				if publishSemverTag {
 					bh = createCommitToFixDeps(wt, semverTag)
 				} else {
-					fmt.Printf("DEBUG: Creating commit to fix dependencies for %q.\n", bName)
 					bh = createCommitToFixDeps(wt, bName)
 				}
 			}

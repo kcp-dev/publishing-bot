@@ -72,8 +72,9 @@ func updateGomodWithTaggedDependencies(searchTag string, depsRepo []string, semv
 			var tags []string
 			err = iter.ForEach(func(ref *plumbing.Reference) error {
 				if tagObj, err := dr.TagObject(ref.Hash()); err == nil {
-					if tagObj.Target == commit && strings.HasPrefix(strings.TrimPrefix(ref.Name().Short(), "origin/"), "v") {
-						tags = append(tags, ref.Name().Short())
+					t := strings.TrimPrefix(ref.Name().Short(), "origin/")
+					if tagObj.Target == commit && strings.HasPrefix(t, "v") {
+						tags = append(tags, t)
 					}
 				}
 

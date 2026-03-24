@@ -193,6 +193,12 @@ func main() {
 
 	mappingFilesWritten := map[string]bool{}
 
+	// DEBUG: remove this after debugging
+	fmt.Printf("Tags at %s remote:\n", *sourceRemote)
+	for name, kh := range srcTagCommits {
+		fmt.Printf("%s: %s\n", name, kh.String())
+	}
+
 	// create or update tags from srcTagCommits as local tags with the given prefix
 	createdTags := []string{}
 	for name, kh := range srcTagCommits {

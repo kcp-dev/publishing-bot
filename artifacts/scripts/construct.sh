@@ -105,24 +105,28 @@ git gc --auto
 # Lines not starting with '^' caret are printed as-is. Lines
 # that do not start with a caret are printed ONLY if the previous
 # line did not start with a caret
-echo "Cleaning .git/packed-refs"
-cp .git/packed-refs .git/packed-refs.bak
-awk '
-NR == 1 {
-    prev_line_start_with_caret = 0
-}
-/^[^^]/ {
-    prev_line_start_with_caret = 0
-    print
-}
-/^\^/ {
-    if (!prev_line_start_with_caret) {
+if [ -f .git/packed-refs ]; then
+    echo "Cleaning .git/packed-refs"
+    cp .git/packed-refs .git/packed-refs.bak
+    awk '
+    NR == 1 {
+        prev_line_start_with_caret = 0
+    }
+    /^[^^]/ {
+        prev_line_start_with_caret = 0
         print
     }
-    prev_line_start_with_caret = 1
-}
-' .git/packed-refs.bak > .git/packed-refs
-rm .git/packed-refs.bak
+    /^\^/ {
+        if (!prev_line_start_with_caret) {
+            print
+        }
+        prev_line_start_with_caret = 1
+    }
+    ' .git/packed-refs.bak > .git/packed-refs
+    rm .git/packed-refs.bak
+else
+    echo "No .git/packed-refs file, skipping cleanup."
+fi
 
 echo "Fetching from origin."
 git fetch origin --no-tags --prune

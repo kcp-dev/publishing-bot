@@ -551,6 +551,10 @@ function skip-gomod-update() {
     grep -F -q -x "$1" <<EOF
 e2a017327c1af628f4f0069cbd49865ad1e81975
 fd0df59f5ba786cb25329e3a9d2793ad4227ed87
+
+# kcp-1.36.0 rebase (missing replace directives)
+f9fd2f2a53593a66fa38f9e8fe144f43766f190e
+03a47b26ba9e1edb2d4e2134e99dd5ff249870b1
 EOF
 }
 
